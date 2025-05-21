@@ -1,3 +1,4 @@
+import { ToastContainer } from 'react-toastify';
 import './App.css'
 import Header from "./components/Header"
 import { Outlet } from "react-router-dom";
@@ -9,6 +10,7 @@ function App() {
       <main className="p-4">
         <Outlet />
       </main>
+      <ToastContainer/>
     </div>
   );
 }

@@ -1,47 +1,87 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export default function Header() {
-    const [hamOpen, sethamOpen] = useState(false);
+export default function Signup() {
+  const [email, setEmail] = useState("");
+  const [validEmail, setValidEmail] = useState(true);
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-    return (
-        <>
-            <div className="bg-[#f0f0f0] h-15 flex justify-between items-center">
-                <div>
-                    <a href="/">
-                        <img
-                            alt="Car Logo"
-                            width={90}
-                            height={30}
-                            style={{ height: "auto" }}
-                            src="/Logo.svg"
-                            priority/>
-                    </a>
-                </div>
-                <nav className="mx-10 flex max-[570px]:hidden">
-                    <a className="mx-6 px-2 bg-white hover:shadow-lg rounded-md" href="/">Login</a>
-                    <a className="mx-6 px-2 bg-white hover:shadow-lg rounded-md" href="#">Contacts</a>
-                    <a className="mx-6 px-2 bg-white hover:shadow-lg rounded-md" href="#">About Us</a>
-                </nav>
-                <button className="min-[570px]:hidden m-5 p-2" onClick={() => sethamOpen(!hamOpen)}>
-                    {hamOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
-            </div>
-            <AnimatePresence>
-                {hamOpen && <motion.nav initial={{ opacity: 0, scaleY: 0 }}
-                    animate={{ opacity: 1, scaleY: 1 }}
-                    exit={{ opacity: 0, scaleY: 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    style={{ originY: 0 }}
-                    className="min-[570px]:hidden bg-red shadow-lg" >
-                    <ul className="flex flex-col items-start p-4 space-y-2">
-                        <li><a href="/" className="block w-full">Login</a></li>
-                        <li><a href="#" className="block w-full">Contacts</a></li>
-                        <li><a href="#" className="block w-full">About Us</a></li>
-                    </ul>
-                </motion.nav>}
-            </AnimatePresence>
-        </>
-    );
+  const navigate = useNavigate();
+
+  const validateEmail = () => {
+    const isValid = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email);
+    setValidEmail(isValid);
+    return isValid;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateEmail()) return;
+
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/auth/register`,
+        { email, password }
+      );
+      localStorage.setItem("token", res.data.token);
+      navigate("/profile");
+    } catch (err) {
+      alert(err.response?.data?.message || "Signup failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="mt-10 flex justify-center px-4">
+      <div className="w-full max-w-md">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-2">Sign Up</h2>
+          <p className="text-sm text-gray-500">Create a new account</p>
+        </div>
+        <form onSubmit={handleSubmit} className="flex flex-col space-y-4 mt-6">
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            className="p-2 border rounded"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          {!validEmail && <p className="text-xs text-red-500">Enter a valid email address</p>}
+
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            className="p-2 border rounded"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <button
+            type="submit"
+            className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+            disabled={loading}
+          >
+            {loading ? "Signing up..." : "Sign Up"}
+          </button>
+        </form>
+
+        <div className="text-center mt-4">
+          <p className="text-sm">
+            Already have an account?{" "}
+            <a href="/login" className="text-blue-600 hover:underline">
+              Log in
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 }
