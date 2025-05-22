@@ -1,12 +1,17 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function Signup() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [validEmail, setValidEmail] = useState(true);
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [passwordMatch, setPasswordMatch] = useState(true);
 
   const navigate = useNavigate();
 
@@ -20,16 +25,23 @@ export default function Signup() {
     e.preventDefault();
     if (!validateEmail()) return;
 
+    if (password !== confirmPassword) {
+      setPasswordMatch(false);
+      return;
+    }
+
+    setPasswordMatch(true);
     setLoading(true);
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/auth/register`,
-        { email, password }
+        { name, email, password }
       );
       localStorage.setItem("token", res.data.token);
+      toast.success("Signup successful");
       navigate("/profile");
     } catch (err) {
-      alert(err.response?.data?.message || "Signup failed");
+      toast.error(err.response?.data?.message || "Signup failed");
     } finally {
       setLoading(false);
     }
@@ -43,6 +55,16 @@ export default function Signup() {
           <p className="text-sm text-gray-500">Create a new account</p>
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4 mt-6">
+          <label htmlFor="name">Name</label>
+          <input
+            id="name"
+            className="p-2 border rounded"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+
           <label htmlFor="email">Email</label>
           <input
             id="email"
@@ -58,11 +80,34 @@ export default function Signup() {
           <input
             id="password"
             className="p-2 border rounded"
-            type="password"
+            type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+
+          <label htmlFor="confirmPassword">Confirm Password</label>
+          <input
+            id="confirmPassword"
+            className="p-2 border rounded"
+            type={showPassword ? "text" : "password"}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+          {!passwordMatch && (
+            <p className="text-xs text-red-500">Passwords do not match</p>
+          )}
+
+          <label className="inline-flex items-center text-sm">
+            <input
+              type="checkbox"
+              className="mr-2"
+              checked={showPassword}
+              onChange={() => setShowPassword((prev) => !prev)}
+            />
+            Show Passwords
+          </label>
 
           <button
             type="submit"

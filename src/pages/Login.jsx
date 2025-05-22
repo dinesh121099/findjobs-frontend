@@ -8,6 +8,7 @@ export default function Login() {
   const [validEmail, setValidEmail] = useState(true);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const validateEmail = () => {
@@ -42,20 +43,19 @@ export default function Login() {
     <div className="mt-10 flex justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center">
-          <h2>LOG IN</h2>
-          <h5>Having an account already?</h5>
+          <h2 className="text-2xl font-bold mb-2" >LOG IN</h2>
+          <p className="text-sm text-gray-500">Having an account already?</p>
         </div>
 
         <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
-          <label htmlFor="email" className="my-2">Your email address</label>
+          <label htmlFor="email" className="my-2">Email</label>
           <input
             id="email"
             type="email"
-            placeholder="Enter Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="border p-2"
+            className="p-2 border rounded"
           />
           {!validEmail && (
             <p className="text-xs text-red-500 ml-2 -mt-2">Please enter a valid email</p>
@@ -64,15 +64,23 @@ export default function Login() {
           <label htmlFor="password" className="my-2">Your password</label>
           <input
             id="password"
-            type="password"
-            placeholder="Enter Password"
+            type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="border p-2"
+            className="p-2 border rounded"
           />
 
-          <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded" disabled={loading || !validEmail}>
+          <div className="flex items-center space-x-2 text-sm">
+            <input
+              type="checkbox"
+              id="showPassword"
+              onChange={() => setShowPassword(!showPassword)}
+            />
+            <label htmlFor="showPassword">Show password</label>
+          </div>
+
+          <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded cursor-pointer"  disabled={loading || !validEmail}>
             {loading ? "Loading..." : "Login"}
           </button>
         </form>
@@ -80,7 +88,13 @@ export default function Login() {
         <div className="flex flex-col items-center space-y-3 mt-6">
           <hr className="w-full border-t" />
           <h5>Don&apos;t have an account?</h5>
-          <button className="w-full border py-2 rounded" >Sign Up</button>
+          <button 
+            className="w-full border py-2 rounded hover:bg-red-600 cursor-pointer" 
+            type="button" 
+            onClick={() => navigate("/signup")}
+          >
+            Sign Up
+          </button>
         </div>
       </div>
     </div>
