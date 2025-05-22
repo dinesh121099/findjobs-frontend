@@ -20,9 +20,7 @@ export default function Recommendations() {
             },
           }
         );
-
-        // Expecting structured JSON from backend (array of job recommendations)
-        const jobs = res.data.recommendations || []; // adjust key based on actual response
+        const jobs = res.data.recommendations || [];
         setRecommendations(jobs);
       } catch (error) {
         toast.error("Failed to fetch recommendations");
