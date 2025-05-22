@@ -12,7 +12,7 @@ export default function Recommendations() {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL}/api/ai/recommendations`,
+          `${import.meta.env.VITE_API_BASE_URL}/ai/recommendations`,
           {},
           {
             headers: {
