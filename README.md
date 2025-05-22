@@ -1,12 +1,79 @@
-# React + Vite
+# React + Vite + ESLint
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🧠 FindJobs Frontend
 
-Currently, two official plugins are available:
+An AI-powered job matching platform that helps users discover jobs tailored to their profile. This repository contains the **React.js frontend** of the application.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- User Authentication (Login, Signup)
+- Profile creation & editing
+- AI-powered job recommendations using OpenAI
+- Dynamic job listings fetched from backend
+- Responsive UI with Tailwind CSS
+- Smooth animations via Framer Motion
+- JWT-based auth token storage
+- Modular component structure
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 📁 Project Structure
+
+    src/
+    ├── components/ 
+    │ ├── JobList.jsx
+    │ ├── Recommendations.jsx
+    ├── pages/ 
+    │ ├── Home.jsx
+    │ ├── Login.jsx
+    │ ├── Signup.jsx
+    │ ├── Profile.jsx
+    ├── App.jsx
+    ├── main.jsx
+    ├── assets/
+    └── utils/
+
+
+---
+
+## 🛠️ Technologies Used
+
+| Tech             | Usage                  |
+|------------------|------------------------|
+| React 19         | UI rendering           |
+| React Router DOM | Routing                |
+| Axios            | API requests           |
+| Tailwind CSS 4   | Styling                |
+| Framer Motion    | Animations             |
+| React Toastify   | Notifications          |
+| Vite             | Development build tool |
+| Lucide React     | Icon library           |
+
+---
+.env (example)
+    VITE_API_BASE_URL=https://your-backend-api.com
+
+---
+
+## Authentication Flow
+Token is stored in localStorage upon login or signup.
+Token is attached in headers for protected routes:
+
+- Authorization: Bearer <token>
+
+---
+
+## AI Recommendations
+Flow:
+- User clicks Find My Matches on the home page.
+- Frontend sends a POST request to /api/ai/recommendations with JWT.
+- Backend formats prompt using user profile → calls OpenAI API.
+- Recommended jobs are returned and rendered as animated cards.
+
+## Todos
+- Add profile editing UI
+- Improve accessibility & SEO
+- Add filters to job listings
+- Write unit tests with Vitest
+
+## Deployed in Vercel
