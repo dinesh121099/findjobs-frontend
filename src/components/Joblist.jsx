@@ -49,7 +49,7 @@ const JobList = () => {
               <div className="flex flex-wrap gap-1 mt-1">
                 {job.skills.map((skill, i) => (
                   <span
-                    key={i}
+                    key={`${skill}-${i}`}
                     className="text-xs text-blue-700 bg-blue-100 px-2 py-1 rounded-full"
                   >
                     {skill}

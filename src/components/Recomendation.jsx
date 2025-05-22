@@ -20,7 +20,8 @@ export default function Recommendations() {
             },
           }
         );
-        const jobs = res.data.recommendations || [];
+        const recommendationsObj = JSON.parse(res.data.recommendations);
+        const jobs = recommendationsObj.matches || [];
         setRecommendations(jobs);
       } catch (error) {
         toast.error("Failed to fetch recommendations");
@@ -38,6 +39,7 @@ export default function Recommendations() {
 
   return (
     <div className="space-y-4 mt-6">
+      <h3> TOP 3 Matches</h3>
       {recommendations.map((job, idx) => (
         <motion.div
           key={idx}
@@ -45,20 +47,11 @@ export default function Recommendations() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: idx * 0.1 }}
           viewport={{ once: true }}
-          className="p-4 border rounded-lg shadow-md hover:shadow-lg transition"
+          className="p-4 border rounded-lg shadow-md hover:shadow-lg transition bg-white cursor-pointer"
         >
-          <h3 className="text-lg font-semibold">{job.title}</h3>
-          <p className="text-gray-600">{job.company} — {job.location}</p>
-          <p className="text-sm mt-2">{job.description}</p>
-          {job.skills && job.skills.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-2">
-              {job.skills.map((skill, i) => (
-                <span key={i} className="bg-gray-200 px-2 py-1 text-xs rounded">{skill}</span>
-              ))}
-            </div>
-          )}
+          <p className="text-gray-800">{job}</p>
         </motion.div>
       ))}
-    </div>
+  </div>
   );
 }
