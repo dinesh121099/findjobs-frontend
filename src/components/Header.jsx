@@ -11,7 +11,7 @@ export default function Header() {
                 <div>
                     <a href="/" className="flex items-center ml-4">
                         <Briefcase size={32} className="text-black" />
-                        <span className="ml-2 text-xl font-bold">FindJob</span>
+                        <span className="ml-2 text-xl font-bold">FindJob</span> 
                     </a>
                 </div>
                 <nav className="mx-10 flex max-[570px]:hidden">
