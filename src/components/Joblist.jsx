@@ -2,21 +2,32 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const JobList = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token") || null;
+        if(!token){
+          navigate("/");
+        }
         const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/jobs`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setJobs(res.data);
       } catch (error) {
-        toast.error("Failed to load job listings.");
+        if(error.status == '401'){
+          toast.info("Session expired - Login again");
+          navigate("/login");
+        }
+        else{
+          toast.error("Failed to load job listings.");
+        }
       } finally {
         setLoading(false);
       }
