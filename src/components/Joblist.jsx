@@ -14,12 +14,14 @@ const JobList = () => {
       try {
         const token = localStorage.getItem("token") || null;
         if(!token){
-          navigate("/");
+          navigate("/login");
         }
-        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/jobs`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setJobs(res.data);
+        else{
+          const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/jobs`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setJobs(res.data);
+        }
       } catch (error) {
         if(error.status == '401'){
           toast.info("Session expired - Login again");

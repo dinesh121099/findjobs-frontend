@@ -27,7 +27,6 @@ export default function Login() {
         email,
         password,
       });
-
       localStorage.setItem("token", res.data.token);
       toast.success("Login successful");
       navigate("/");
