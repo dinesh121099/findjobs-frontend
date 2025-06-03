@@ -21,7 +21,13 @@ export default function Profile() {
         });
         setProfile(res.data);
       } catch (err) {
-        toast.error("Failed to load profile");
+        if(err.status == '401'){
+          toast.info("Session expired - Login again");
+          navigate("/login");
+        }
+        else{
+          toast.error("Failed to load profile");
+        }
       }
     };
     fetchProfile();
