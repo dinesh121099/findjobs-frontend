@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useUser } from "../context/userContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -10,6 +11,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { login } = useUser();
 
   const validateEmail = () => {
     const isValid = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email);
@@ -27,11 +29,10 @@ export default function Login() {
         email,
         password,
       });
-      localStorage.setItem("token", res.data.token);
+      login({token: res.data.token});
       toast.success("Login successful");
-      navigate("/");
     } catch (err) {
-      const message = err.response.data.error || "Login failed. Try again later.";
+      const message = err.response?.data?.error || "Login failed. Try again later.";
       toast.error(message);
     } finally {
       setLoading(false);
@@ -88,7 +89,7 @@ export default function Login() {
           <hr className="w-full border-t" />
           <h5>Don&apos;t have an account?</h5>
           <button 
-            className="w-full border py-2 rounded hover:bg-red-600 cursor-pointer" 
+            className="w-full border py-2 rounded hover:bg-red-600 hover:text-white cursor-pointer" 
             type="button" 
             onClick={() => navigate("/signup")}
           >

@@ -52,7 +52,7 @@ export default function Profile() {
       });
       toast.success("Profile updated successfully");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Update failed");
+      toast.error(err.response?.data?.message || "Update failed, try again later");
     } finally {
       setLoading(false);
     }

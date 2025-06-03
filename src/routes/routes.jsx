@@ -4,11 +4,16 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Profile from "../pages/Profile";
+import { UserProvider } from "../context/userContext";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <UserProvider>
+        <App />
+      </UserProvider>
+      ),
     children: [
       { index: true, element: <Home /> },
       { path: "login", element: <Login /> },
