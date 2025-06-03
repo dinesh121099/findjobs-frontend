@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { use } from "framer-motion/m";
 
 const JobList = () => {
   const [jobs, setJobs] = useState([]);
@@ -46,7 +47,7 @@ const JobList = () => {
         <div className="space-y-4">
           {jobs.map((job, index) => (
             <motion.div
-              key={job.id}
+              key={job._id}
               className="p-4 border rounded shadow-sm cursor-pointer bg-white"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
