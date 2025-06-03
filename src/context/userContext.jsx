@@ -22,9 +22,9 @@ export const UserProvider = ({ children }) => {
     const login = (data) => {
       setuserDetails({
         loggedin: true,
-        name: data?.name,
-        email: data?.email,
-        token: data?.token
+        name: data?.name || "",
+        email: data?.email || "",
+        token: data?.token || ""
       })
       localStorage.setItem("token", data.token);
       navigate("/");
