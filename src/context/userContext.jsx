@@ -6,9 +6,14 @@ const userContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const navigate = useNavigate();
+    const token = localStorage.getItem("token") || null;
+    let loginStatus = false;
+    if(token){
+      loginStatus = true;
+    }
 
     const [ userDetails, setuserDetails] = useState({
-        loggedin: false,
+        loggedin: loginStatus,
         name:"",
         email:"",
         token:""
