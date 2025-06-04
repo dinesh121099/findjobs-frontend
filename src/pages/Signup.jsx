@@ -1,7 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useUser } from "../context/userContext";
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -14,6 +15,7 @@ export default function Signup() {
   const [passwordMatch, setPasswordMatch] = useState(true);
 
   const navigate = useNavigate();
+  const { login } = useUser();
 
   const validateEmail = () => {
     const isValid = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email);
@@ -37,12 +39,14 @@ export default function Signup() {
         `${import.meta.env.VITE_API_BASE_URL}/auth/register`,
         { name, email, password }
       );
-      localStorage.setItem("token", res.data.token);
+      login( {token: res.data.token} );
       toast.success("Signup successful");
       navigate("/profile");
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Signup failed");
-    } finally {
+    } 
+    catch (err) {
+      toast.error(err.response?.data?.error || "Signup failed");
+    } 
+    finally {
       setLoading(false);
     }
   };
@@ -121,9 +125,9 @@ export default function Signup() {
         <div className="text-center mt-4">
           <p className="text-sm">
             Already have an account?{" "}
-            <a href="/login" className="text-blue-600 hover:underline">
+            <Link to="/login" className="text-blue-600 hover:underline">
               Log in
-            </a>
+            </Link>
           </p>
         </div>
       </div>

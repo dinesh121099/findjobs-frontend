@@ -58,7 +58,7 @@ export default function Profile() {
       });
       toast.success("Profile updated successfully");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Update failed, try again later");
+      toast.error(err.response?.data?.error || "Update failed, try again later");
     } finally {
       setLoading(false);
     }
@@ -99,7 +99,7 @@ export default function Profile() {
             id="location"
             name="location"
             type="text"
-            value={profile.location}
+            value={profile.location || ""}
             onChange={handleChange}
             className="w-full p-2 border rounded"
           />
@@ -113,7 +113,7 @@ export default function Profile() {
             id="skills"
             name="skills"
             type="text"
-            value={profile.skills.join(", ")}
+            value={(profile.skills || []).join(", ")}
             onChange={handleSkillsChange}
             className="w-full p-2 border rounded"
           />
